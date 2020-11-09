@@ -32,3 +32,34 @@ private:
     - 정적 멤버로 사용하는 방식 해당 문법을 받아들이지 않는 컴파일러도 존재한다.
 
 ## 낌새만 보이면 const를 들이대 보자
+- const를 붙여 선언하면 컴파일러가 사용상의 에러를 잡아내는데 도움을 준다.
+- const는 객체, 함수 매개변수, 반환 타입, 멤버 함수 등 다양한 곳에 붙을 수있다.
+
+## 객체를 사용하기 전에 반드시 초기화
+- 모든 객체를 사용전에 초기화 하는게 좋다.
+- 생성자에서 지킬 규칙은 **객체의 모든것을 초기화 하자**이다.
+- 생성자에서 대입문을 사용하지 않고 이니셜라이저를 사용한다.
+
+```cpp
+class FileSystem
+{
+public:
+    std::size_t numDisks() const;
+};
+extern FileSystem tfs;
+
+class Directory
+{
+public:
+    Directory::Directory(params)
+    {
+        std::size_t disks = tfs.numDisks();
+    }
+};
+
+
+Directory tempDir(params);
+```
+- 위 코드에서 `tfs`가 `tempDir`보다 먼저 초기화 되지 않으면 `tempDir`의 생성자는 `tfs`가 초기화 되지도 않았는데 `tfs`를 사용하려고 할것이다.
+- 서로 다른 단위에 전의된 비지역 정적 객체들 사이의 상대적인 초기화 순서는 정해져 있지 않다.
+- 여러 단위에 있는 비지역 정적 객체들의 초기화 순서문제는 피해서 설계해야한다. (비지역 정적 객체를 지역 정적 객체로 바꾸는것을 통해)
