@@ -35,6 +35,20 @@ private:
 - const를 붙여 선언하면 컴파일러가 사용상의 에러를 잡아내는데 도움을 준다.
 - const는 객체, 함수 매개변수, 반환 타입, 멤버 함수 등 다양한 곳에 붙을 수있다.
 
+```cpp
+char greeting[] = "HELLO";
+char testing[] = "TEST";
+
+const char* p = greeting; // 상수를 가리키는 포인터
+// p[1] = 'T'; 에러
+
+char* const p = greeting; // 상수 포인터
+// p = testing; 에러
+
+const char * const p = greeting // 상수를 가리키는 상수 포인터
+// 위 2개 모두 에러
+```
+
 ## 객체를 사용하기 전에 반드시 초기화
 - 모든 객체를 사용전에 초기화 하는게 좋다.
 - 생성자에서 지킬 규칙은 **객체의 모든것을 초기화 하자**이다.
