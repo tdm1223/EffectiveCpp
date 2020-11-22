@@ -95,3 +95,34 @@ TimeKeeper *getTimeKeeper();
 2. 발생한 예외를 삼켜버린다.
 
 - 예외를 일으키면서 실패할 가능성이 있고 예외를 처리해야 할 필요가 있다면 예외는 **소멸자가 아닌 다른 함수에서 비롯된 것**이어야 한다.
+
+## 객체 생성 및 소멸 과정 중에는 절대로 가상 함수를 호출하지 말기
+```cpp
+class Transaction{
+public:
+    Transaction()
+    {
+        logTransaction();
+    }
+    virtual void log Transaction() const = 0;
+}
+
+class BuyTransaction: public Transaction{
+public:
+    virtual void logTransaction() const;
+}
+
+BuyTransaction b;
+```
+### 객체가 생성될 때
+- 위의 객체 b를 생성하는 과정에서 기본 클래스인 `Transaction`의 생성자가 먼저 호출되게 되는데 이때 `logTransaction`은 파생 클래스의 것이 아닌 기본 클래스의 것이 호출된다.
+- 기본 클래스의 생성자는 파생 클래스의 생성자보다 먼저 실행된다.
+- 기본 클래스의 생성자가 호출될 동안에는, 가상 함수는 절대로 파생 클래스 쪽으로 내려가지 않는다.
+- 파생 클래스의 기본 클래스 부분이 생성되는 동안 그 객체의 타입은 기본 클래스이다.
+
+### 객체가 소멸될 때
+- 파생 클래스의 소멸자가 호출되고 나면 파생 클래스만의 데이터 멤버는 정의되지 않은 값으로 가정한다.
+- 기본 클래스 소멸자에 진입할 당시의 객체는 더도 덜도 아닌 기본 클래스 객체가 된다.
+
+### 해결방법
+- `logTransaction`을 `Transaction` 클래스의 비가상 멤버로 바꾼다.
