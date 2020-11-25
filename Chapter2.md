@@ -140,3 +140,29 @@ Widget& operator=(const Widget& rhs)
 }
 ```
 
+## operator=에서는 자기대입에 대한 처리가 빠지지 않도록 하자
+### 자기대입
+- 어떤 객체가 자기 자신에 대해 대입 연산자를 적용하는것
+```cpp
+class Widget{};
+Widget w;
+w = w; // 자기에 대한 대입
+```
+- 놀랍게도 사용할수 있는 가능성이 높은 코드이다.
+- 여러 곳에서 하나의 객체를 참조하는 상태인 중복 참조(aliasing) 때문에 자기대입이 생길 수 있다.
+- 전통적인 해결책은 `operator=`의 첫머리에서 일치성 검사를 통해 자기대입을 점검하는 방법이다.
+    - `if(this == &rhs) return *this;`
+- 대입 연산자에서 메모리 할당이 일어날 경우
+    - 원래의 객체를 어딘가에 기억해둔다.
+    - 사본을 가리키게 만든다.
+    - 원래의 객체를 삭제한다.
+    
+```cpp
+Widget& Widget::operator=(const Widget& rhs)
+{
+    Bitmap *pOrig = pb;
+    pb = new Bitmap(*rhs.pb);
+    delete pOrig;
+    return *this;
+}
+```
