@@ -125,3 +125,67 @@ printNameAndDisplay(wwsb);
     2. STL반복자
     3. 함수 객체타입
 - 위 3가지 항목 외의 타입에 대해서는 상수객체 참조자에 의한 전달을 선택하는것이 좋다.
+
+## 함수에서 객체를 반환해야 할 경우에 참조자를 반환하려고 들지 말기
+- 값에 의한 전달에 숨겨진 효율을 알고 전부다 참조에 의한 전달로 바꾸려는것은 좋지않다.
+- 참조자는 존재하는 객체에 붙는 다른 이름일 뿐이다.
+
+```cpp
+class Rational{
+public:
+    Rational(int numerator = 0, int denominator = 1);
+private:
+    int n,d;
+friend const Rational operator*(const Rational& lhs, const Rational& rhs);
+};
+
+Rational a(1, 2);
+Rational b(3, 5);
+Rational c = a * b;
+```
+- 위 클래스에서 `operator*`가 참조자를 반환하도록 만들어졌다면, 이 함수가 반환하는 참조자는 반드시 이미 존재하는 `Rational` 객체의 참조자여야 한다.
+- 반환될 객체는 어디 있는가? 참조자를 반환하려면 유리수 객체를 직접 생성해야만 한다.
+
+### 함수 수준에서 새로운 객체 만드는 방법
+1. 스택
+```cpp
+const Rational& operator*(const Rational& lhs, const Rational& rhs)
+{
+    Rational result(lhs.n * rhs.n, lhs.d * rhs.d);
+    return result;
+}
+```
+- `result`는 **지역 객체**이다. (함수가 끝날때 소멸된다)
+- 이런 지역 객체를 반환한다면?
+    - 더이상의 설명은 필요없다.
+    
+2. 힙
+```cpp
+const Rational& operator*(const Rational& lhs, const Rational& rhs)
+{
+    Rational *result = new Rational(lhs.n * rhs.n, lhs.d * rhs.d);
+    return *result;
+}
+```
+- `new`로 생성한 객체는 어디서 `delete`될것인가?
+    - 더이상의 설명은 필요없다.
+
+### Rational 객체를 정적 객체로 함수 안에 정의해 놓고 이것의 참조자를 반환한다면?
+- 스레드 안정성의 문제
+- `operator==`연산자 오버로딩시 항상 같은 값을 반환할 수 있다(정적 객체)
+
+### 정적 데이터를 배열로 쓴다면?
+- 배열의 크기를 먼저 정해야 한다.
+    - 적당하게 해야한다. 작으면 반환값을 저장할 공간이 부족하고 크다면 수행 성능이 떨어진다. (불가능)
+
+### BEST 코드
+```cpp
+inline const Rational operator*(const Rational& lhs, const Rational& rhs)
+{
+    return Rational(lhs.n * rhs.n, lhs.d * rhs.d);
+}
+```
+
+
+
+
