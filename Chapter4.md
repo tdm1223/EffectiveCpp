@@ -199,3 +199,36 @@ inline const Rational operator*(const Rational& lhs, const Rational& rhs)
 - `protected`는 `public`보다 더 많이 보호받고 있는것이 절대로 아니다.
 - 캡슐화 관점에서 쓸모있는 접근 수준은 `private`(캡슐화 제공)와 `private가 아닌 나머지`(캡슐화 없음) 둘뿐이다.
 
+## 멤버 함수보다는 비멤버 비프렌드 함수와 더 가까워지기
+### 캡슐화
+- 캡슐화하면 외부에서 볼 수 없게 된다.
+- 캡슐화 하는 것이 늘어나면 밖에서 볼 수 있는 것들이 줄어든다.
+- 밖에서 볼 수 있는 것이 줄어들면 그것들을 바꿀 때 필요한 유연성이 커진다.
+
+### 웹브라우저를 나타내는 클래스가 있다고 가정
+```cpp
+class WebBrowser{
+public:
+    void clearCache();
+    void clearHistory();
+    void removeCookies();
+    void clearEverything(); // 위 3개를 한번에 호출해 주는 함수
+}
+```
+- clearEverything() 함수는 비멤버 함수로 제공할 수 있다.
+```cpp
+void clearBrowser(WebBrowser& wb)
+{
+    wb.clearCache();
+    wb.clearHistroy();
+    wb.removeCookies();
+}
+```
+- 어느쪽이 더 괜찮을까?
+    - 비멤버 버전이 캡슐화 정도가 높고 패키징 유연성 또한 높다.
+
+### 주의해야 할 점
+- 비프렌드 함수에만 적용된다.
+- `함수는 어떤 클래스의 비멤버가 되어야 한다`라는 주장이 `그 함수는 다른 클래스의 멤버가 될 수 없다` 라는 의미가 아니다.
+    - C++로는 비멤버 함수로 두고 같은 네임스페이스 안에두는것으로 구사할 수 있다.
+    - 네임스페이스는 클래스와 달리 여러 개의 소스 파일에 나뉘어 흩어질 수 있기 때문이다.
