@@ -232,3 +232,38 @@ void clearBrowser(WebBrowser& wb)
 - `함수는 어떤 클래스의 비멤버가 되어야 한다`라는 주장이 `그 함수는 다른 클래스의 멤버가 될 수 없다` 라는 의미가 아니다.
     - C++로는 비멤버 함수로 두고 같은 네임스페이스 안에두는것으로 구사할 수 있다.
     - 네임스페이스는 클래스와 달리 여러 개의 소스 파일에 나뉘어 흩어질 수 있기 때문이다.
+
+## 타입 변환이 모든 매개변수에 대해 적용되어야 한다면 비멤버 함수를 선언하기
+### 유리수를 나타내는 클래스
+```cpp
+class Rational{
+public:
+    Rational(int numerator = 0, int denominator = 1);
+    int numerator() const;
+    int denominator() const;
+}
+```
+- 생성자에 일부러 explicit를 붙이지 않았다.
+- int에서 Rational로의 암시적 변환을 허용한다.
+
+### 곱셈 지원
+```cpp
+const Rational operator* (const Rational& rhs) const; // 멤버함수로 추가!
+```
+- 위처럼 설계하면 아래와 같은 연산때 문제가 발생한다.
+```cpp
+result = oneHalf * 2; // 성공 result = oneHalf.operator*(2)
+result = 2 * oneHalf; // 에러 result = 2.operator*(onehalf)
+```
+- 위의 예처럼 혼합형 수치연산을 지원하지 못하는 문제가 생기게 된다.
+
+### 알수 있는 사실
+- **암시적 타입 변환**에 대해 매개변수가 먹혀들려면 **매개변수 리스트**에 들어 있어야만 한다.
+- `operator*`를 **비멤버 함수**로 만들어서, 컴파일러 쪽에서 모든 인자에 대해 암시적 타입 변환을 수행하도록 한다.
+```cpp
+const Rational operator*(const Rational* lhs, const Rational* rhs)
+{
+    return Rational (lhs.numerator() * rhs.numerator(), lhs.denominator() * rhs.denominator());
+}
+```
+- 멤버 함수의 반대는 프렌드 함수가 아니라 비멤버 함수이다.
