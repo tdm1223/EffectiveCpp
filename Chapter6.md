@@ -267,3 +267,55 @@ pd->f(); // D::f()를 호출한다.
 - 가상 함수는 **동적 바인딩**으로 묶인다.
     - `f` 함수가 가상 함수였다면 `f`가 `pb`에서 호출되든 `pd`에서 호출되든 `D::mf`가 호출된다.
     - `pb`, `pd`가 실제로 가리키는 대상은 **D 타입**의 객체이기 때문이다.
+
+## 어떤 함수에 대해서도 상속받은 기본 매개변수 값은 절대로 재정의 하지 말기
+### 객체의 정적 타입
+- 프로그램 소스 안에 선언문을 통해 객체가 갖는 타입
+```cpp
+class Shape{
+public:
+    enum ShapeColor {Red, Green, Blue};
+    virtual void draw(ShapeColor color = Red) const = 0;
+};
+
+class Rectangle: public Shape{
+public:
+    virtual void draw(ShapeColor color = Green) const; // 기본 매개 변수가 다르다.
+};
+
+Shape * ps;
+Shape * pr = new Rectangle;
+```
+- ps, pr은 Shape에 대한 포인터로 선언되어 있기 때문에, 각각의 정적 타입도 모두 이타입이다.
+- 진짜로 가리키는 대상이 달라지는것은 하나도 없다.
+
+### 객체의 동적 타입
+- 현재 그 객체가 진짜로 무엇이냐에 따라 결정되는 타입
+```cpp
+ps = pr; // ps의 동적 타입은 이제 Circle*가 된다.
+pr->draw(Shape::Red); // Circle::draw(Shape::Red)를 호출한다.
+pr->draw(); // Rectangle::draw(Shape::Red)를 호출한다.
+```
+- pr의 동적 타입이 `Rectangle*`이므로 호출되는 가상 함수는 `Rectangle`의 것이다.
+- pr의 정적 타입은 `Shape*`이기 때문에, 호출되는 가상 함수에 쓰이는 기본 매개변수 값을 `Shape` 클래스에서 가져온다.
+- `Shape` 및 `Rectangle` 클래스 양쪽에서 선언된 것이 한데 섞이는 이상하고 기상천외한 함수 호출이 이루어진다.
+- 해결하기 위해선 비가상 인터페이스 관용구를 사용하면 된다.
+    - 파생 클래스에서 재정의 할 수 있는 가상 함수를 `private` 멤버로 두고 이 가상 함수를 호출하는 `public` 비가상 함수를 기본 클래스에 만들어 두는 것이다.
+    - 비가상 함수가 기본 매개변수를 지정하도록 하면 기본 매개변수도 설정할 수 있다.
+```cpp
+class Shape{
+public:
+    enum ShapeColor {Red, Green, Blue};
+    void draw(ShapeColor color = Red) const
+    {
+        doDraw(color);
+    }
+private:
+    virtual void doDraw(ShapeColor color) const = 0;
+};
+
+class Rectangle: public Shape{
+public:
+private:
+    virtual void doDraw(ShapeColor color) const; // 기본 매개변수 값이 없다.
+};
