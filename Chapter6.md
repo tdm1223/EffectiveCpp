@@ -392,3 +392,79 @@ private:
 - 이를 해결하기 위해 Empty 객체를 멤버로 두지 말고 기본 클래스로 바꿈으로써 해결할 수 있다. `sizeof(B) == sizeof(int)`
 - 공백 기본 클래스 최적화는 단일 상속하에서만 적용된다.
 
+## 다중 상속은 심사숙고해서 사용하기
+### 다중 상속의 모호성
+```cpp
+class A{
+public:
+    void func();
+};
+
+class B{
+private:
+    bool func() const;
+};
+
+class D : public A, public B{};
+
+D d;
+d.func(); // 모호성 발생
+```
+- 두 func 함수들 중에서 파생 클래스가 접근할 수 있는 함수가 결정되는 것이 분명한데도 모호성이 발생한다.
+
+### 죽음의 MI(multiple inheritance) 마름모꼴
+```cpp
+class File{};
+class InputFile: public File{};
+class OutputFile: public File{};
+class IOFile: public InputFile, public OutputFile{};
+```
+- `File` 클래스 안에 fileName이라는 멤버 변수가 존재한다면 `IOFile` 클래스에는 기본적으로 중복 생성된 `fileName` 멤버 변수를 가진다.
+
+### 가상 기본 클래스
+- MI 마름모꼴을 해결방법은 가상 기본 클래스가 있다.
+- 가상 기본 클래스로 삼을 클래스에 직접 연결된 파생 클래스에서 가상 상속을 사용하는것이다.
+```cpp
+class File{};
+class InputFile: virtual public File{};
+class OutputFile: virtual public File{};
+class IOFile: public InputFile, public OutputFile{};
+```
+- 가상 상속을 사용하면 비용, 속도가 늘어나며 초기화 및 대입연산의 복잡도가 커지는 단점이 있다.
+- 가상 기본 클래스는 사용하지 않는 것이 좋다.
+- 가상 기본 클래스를 정말 쓰지 않으면 안 될 상황이라면, 가상 기본 클래스에는 데이터를 넣지 않는 쪽으로 신경을 쓴다.
+
+### 다중 상속을 적법하게 쓸 수 있는 경우
+- **인터페이스 클래스**로부터 `public` 상속을 시키고 **구현을 돕는 클래스**로부터 `private` 상속을 시키는것
+
+```cpp
+// 용도에 따라 구현될 인터페이스
+class IPerson {
+public:
+    virtual ~IPerson();
+    virtual string name() const = 0;
+};
+
+// IPerson 인터페이스를 구현하는 데 유용한 함수가 들어있는 클래스
+class PersonInfo {
+public:
+    explicit PersonInfo(int pid);
+    virtual ~PersonInfo();
+    virtual const char* theName() const;
+    virtual const char* valueDelim() const;
+};
+
+class CPerson : public IPerson, private PersonInfo {
+public:
+    explicit CPerson(int pid) : PersonInfo(pid) {}
+
+    // IPerson 클래스의 순수 가상 함수를 파생 클래스에서 구현
+    virtual string name() const
+    {
+        return PersonInfo::theName();
+    }
+private:
+    // 상속된 가상 함수들도 재정의 버전 구현
+    const char* valueDelimOpen() const { return ""; }
+};
+```
