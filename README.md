@@ -9,3 +9,6 @@
 - [항목 2. #define을 쓰려거든 const, enum, inline을 떠올리자](/Chapter1/Item2.md)
 - [항목 3. 낌새만 보이면 const를 들이대 보자!](/Chapter1/Item3.md)
 - [항목 4. 객체를 사용하기 전에 반드시 그 객체를 초기화하자](/Chapter1/Item4.md)
+
+## 생성자, 소멸자 대입 연산자
+- [항목 5. C++가 은근슬쩍 만들어 호출해 버리는 함수들에 촉각을 세우자](/Chapter2/Item5.md)
