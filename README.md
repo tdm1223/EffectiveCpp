@@ -4,7 +4,7 @@
 ## 프리뷰
 - [프리뷰](/Chapter0/Chapter0.md)
 
-## C++에 왔으면 C++의 법을 따르기
+## C++에 왔으면 C++의 법을 따릅시다
 - [항목 1. C++를 언어들의 연합체로 바라보는 안목은 필수](/Chapter1/Item1.md)
 - [항목 2. #define을 쓰려거든 const, enum, inline을 떠올리자](/Chapter1/Item2.md)
 - [항목 3. 낌새만 보이면 const를 들이대 보자!](/Chapter1/Item3.md)
@@ -26,3 +26,6 @@
 - [항목 15. 자원 관리 클래스에서 관리되는 자원은 외부에서 접근할 수 있도록 하자](/Chapter3/Item15.md)
 - [항목 16. new 및 delete를 사용할 때는 형태를 반드시 맞추자](/Chapter3/Item16.md)
 - [항목 17. new로 생성한 객체를 스마트 포인터에 저장하는 코드는 별도의 한 문장으로 만들자](/Chapter3/Item17.md)
+
+## 설계 및 선언
+- [항목 18, 인터페이스 설계는 제대로 쓰기엔 쉽게, 엉터리로 쓰기엔 어렵게 하자](/Chapter4/Item18.md)
