@@ -1,5 +1,4 @@
-# ModernCpp
-- Repository to study Effective Modern C++
+# Effective C++
 
 ## 프리뷰
 - [프리뷰](/Chapter0/Chapter0.md)
@@ -41,3 +40,4 @@
 - [항목 26. 변수 정의는 늦출 수 있는 데까지 늦추는 근성을 발휘하자](/Chapter5/Item26.md)
 - [항목 27. 캐스팅은 절약, 또 절약! 잊지 말자](/Chapter5/Item27.md)
 - [항목 28. 내부에서 사용하는 객체에 대한 '핸들'을 반환하는 코드는 되도록 피하자](/Chapter5/Item28.md)
+- [항목 29. 예외 안정성이 확보되는 그날 위해 싸우고 또 싸우자!](/Chapter5/Item29.md)
