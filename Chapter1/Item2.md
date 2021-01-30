@@ -1,4 +1,4 @@
-## 항목 2. #define을 쓰려거든 const, enum, inline을 떠올리자
+# 항목 2. #define을 쓰려거든 const, enum, inline을 떠올리자
 - 선행 처리자 보다 컴파일러를 가까이하자
 - `#define ASPECT_RATIO 1.653`
     - **전처리 과정**을 통해 `ASPECT_RATIO`를 1.653으로 바꿔준다.
