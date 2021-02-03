@@ -53,3 +53,4 @@
 - [항목 37. 어떤 함수에 대해서도 상속받은 기본 매개변수 값은 절대로 재정의 하지 말자](/Chapter6/Item37.md)
 - [항목 38. "has-a(...는...를 가짐)" 혹은 "is-implemented-in-terms-of(...는...를 써서 구현됨)"를 모형화할 때는 객체 합성을 사용하자](/Chapter6/Item38.md)
 - [항목 39. private 상속은 심사숙고해서 구사하자](/Chapter6/Item39.md)
+- [항목 40. 다중 상속은 심사숙고해서 사용하자](/Chapter6/Item40.md)
