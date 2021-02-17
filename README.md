@@ -67,3 +67,4 @@
 
 ## new와 delete를 내 맘대로
 - [항목 49. new 처리자의 동작 원리를 제대로 이해하자](/Chapter8/Item49.md)
+- [항목 50. new 및 delete를 언제 바꿔야 좋은 소리를 들을지를 파악해 두자](/Chapter8/Item50.md)
