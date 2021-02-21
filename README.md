@@ -70,3 +70,6 @@
 - [항목 50. new 및 delete를 언제 바꿔야 좋은 소리를 들을지를 파악해 두자](/Chapter8/Item50.md)
 - [항목 51. new 및 delete를 작성할 때 따라야 할 기존의 관례를 잘 알아 두자](/Chapter8/Item51.md)
 - [항목 52. 위치지정 new를 작성한다면 위치지정 delete도 같이 준비하자](/Chapter8/Item52.md)
+
+## 그 밖의 이야기들
+- [항목 53. 컴파일러 경고를 지나치지 말자](/Chapter9/Item53.md)
