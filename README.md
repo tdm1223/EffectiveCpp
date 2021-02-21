@@ -69,3 +69,4 @@
 - [항목 49. new 처리자의 동작 원리를 제대로 이해하자](/Chapter8/Item49.md)
 - [항목 50. new 및 delete를 언제 바꿔야 좋은 소리를 들을지를 파악해 두자](/Chapter8/Item50.md)
 - [항목 51. new 및 delete를 작성할 때 따라야 할 기존의 관례를 잘 알아 두자](/Chapter8/Item51.md)
+- [항목 52. 위치지정 new를 작성한다면 위치지정 delete도 같이 준비하자](/Chapter8/Item52.md)
