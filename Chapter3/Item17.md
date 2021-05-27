@@ -1,5 +1,5 @@
 # 항목 17. new로 생성한 객체를 스마트 포인터에 저장하는 코드는 별도의 한 문장으로 만들자
-### 자원을 흘릴 가능성이 있는 코드
+## 자원을 흘릴 가능성이 있는 코드
 ```cpp
 processWidget(std::shared_ptr<Widget>(new Widget), priority());
 ```
@@ -11,11 +11,13 @@ processWidget(std::shared_ptr<Widget>(new Widget), priority());
 
 ### 원인
 - 연산의 실행 순서가 컴파일러마다 다르다.
+- `C++` 컴파일러의 경우 순서를 정하는 데 있어서 상당한 자유도를 갖고 있다.
+  - 자바, `C#` 등의 언어는 매개변수의 평가 순서가 특정하게 고정되어 있다.
 - `new Widget` -> `priority()` -> `shared_ptr`순으로 호출이 되고 `priority()`에서 예외가 발생한다면 `new widget`으로 만들어졌던 **포인터가 유실**될 수 있다.
 - **자원이 생성되는 시점**과 **자원이 자원 관리 객체로 넘어가는 시점** 사이에 예외가 끼어들 수 있다.
 
 ### 해결 방법
-- 스마트 포인터에 저장하는 코드를 별도의 문장 하나로 만들고, 스마트 포인터를 `processWidget`에 넘긴다.
+- **스마트 포인터에 저장하는 코드를 별도의 문장 하나**로 만들고, 스마트 포인터를 `processWidget`에 넘긴다.
 ```cpp
 std::shared_ptr<Widget> pw(new Widget);
 
