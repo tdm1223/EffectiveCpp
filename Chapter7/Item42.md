@@ -1,20 +1,21 @@
 # 항목 42. typename의 두 가지 의미를 제대로 파악하자
-### class와 typename의 차이
+## class와 typename의 차이
 ```cpp
 template<class T> class Base;
 template<typename T> class Base;
 ```
-- 아무런 차이가 없다.
-- **템플릿 매개변수를 선언**하는 경우에 둘은 완전히 같은 의미를 가진다.
+- **템플릿 매개변수를 선언**하는 경우에는 아무런 차이가 없고 완전히 같은 의미를 가진다.
 
-### 의존 이름과 비의존 이름
-1. 의존 이름(dependent name)
-    - 템플릿 매개변수에 따라 달라지는 타입
-    - 의존 이름이 어떤 클래스 안에 중첩되어 있는 경우 **중첩 의존 타입 이름**(nested dependent typename)이라고 한다.
-2. 비의존 이름(non-dependent name)
-    - 템플릿 매개변수가 어떻든 상관없는 타입
+## 의존 이름과 비의존 이름
+### 의존 이름(dependent name)
+- 템플릿 매개변수에 따라 달라지는 타입이다.
+- 의존 이름이 어떤 클래스 안에 중첩되어 있는 경우 **중첩 의존 타입 이름**(nested dependent typename)이라고 한다.
+ 
+### 비의존 이름(non-dependent name)
+- 템플릿 매개변수가 어떻든 상관없는 타입이다.
 
-### 코드 안에 중첩 의존 이름이 존재할때
+## typename이 필요한 경우
+### 코드 안에 중첩 의존 이름이 존재
 ```cpp
 template<typename C>
 void print(const C& container)
@@ -22,14 +23,14 @@ void print(const C& container)
     C::const_iterator * x;
 }
 ```
-- `c::const_iterator`에 대한 포인터 지역 변수 x를 선언하는것 같다.
-  - `C::const_iterator`가 **타입**이라는 사실을 알고 있을때만
+- `C::const_iterator`가 **타입**이라는 사실을 알고 있을때
+  - `c::const_iterator`에 대한 포인터 지역 변수 x를 선언하는것 같다.
 1. `C::const_iterator`가 타입이 아니라면?
 2. `const_iterator`라는 이름을 가진 정적 데이터 멤버가 C에 있다면?
 3. `x`가 다른 전역 변수의 이름이라면?
     - 그냥 곱셈이 된다!
 
-### typename을 사용해야 할 때
+### 해결책
 - `C`의 정체가 무엇인지 다른 곳에서 알려주지 않으면 `C::const_iterator`가 진짜 타입인지 아닌지를 알아낼 방법은 없다.
 - `C++` 컴파일러에게 `C::const_iterator`가 타입이라고 알려 줄 때 앞에다가 `typename`이라는 키워드를 붙여 놓는다.
 
@@ -56,7 +57,7 @@ public:
 };
 ```
 
-### typedef typename의 활용
+## typedef typename의 활용
 ```cpp
 template<typename IterT>
 void Test(IterT iter)
